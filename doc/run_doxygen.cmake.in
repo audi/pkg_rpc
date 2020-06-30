@@ -1,0 +1,55 @@
+#
+# Copyright @ 2019 Audi AG. All rights reserved.
+# 
+#     This Source Code Form is subject to the terms of the Mozilla
+#     Public License, v. 2.0. If a copy of the MPL was not distributed
+#     with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+# 
+# If it is not possible or desirable to put the notice in a particular file, then
+# You may include the notice in a location (such as a LICENSE file in a
+# relevant directory) where a recipient would be likely to look for such a notice.
+# 
+# You may add additional accurate notices of copyright ownership.
+#
+##generate the doxyfile to stdout
+execute_process(COMMAND @DOXYGEN_EXECUTABLE@ -s -g - OUTPUT_VARIABLE doxygen_out)
+
+##set any doxygen tag according to our needs, leave the rest untouched (= default)
+# never use the absolute path for INPUT, otherwise call graphs might be generated with absolute
+# paths inside. Use relative path and execute doxygen from within install dir WORKING_DIRECTORY
+# We could just use @CMAKE_CURRENT_SOURCE_DIR@/input to include all *.md files, but this way we can specify their order for the index
+string(REGEX REPLACE "(INPUT +[=])"
+                     "\\1 Readme.md \
+                     include/rpc_pkg.h \
+                     include/rpc_pkg/json_rpc.h \
+                     include/rpc_pkg/rpc_object_registry.h \
+                     include/rpc_pkg/rpc_server.h \
+                     @CURRENT_IMPORTS_DIR@/licenses/list_used_licenses.md"
+                     doxygen_out ${doxygen_out})
+string(REGEX REPLACE "(RECURSIVE +[=]) NO"
+                     "\\1 YES" doxygen_out ${doxygen_out})
+string(REGEX REPLACE "(PROJECT_NAME +[=]) \"My Project\""
+                     "\\1 \"@PROJECT_NAME@\"" doxygen_out ${doxygen_out})
+string(REGEX REPLACE "(PROJECT_NUMBER +[=])"
+                     "\\1 v@PROJECT_VERSION@" doxygen_out ${doxygen_out})
+string(REGEX REPLACE "(OUTPUT_DIRECTORY +[=])"
+                     "\\1 @CMAKE_INSTALL_PREFIX@/doc" doxygen_out ${doxygen_out})
+string(REGEX REPLACE "(GENERATE_LATEX +[=]) YES"
+                     "\\1 NO" doxygen_out ${doxygen_out})
+string(REGEX REPLACE "(HAVE_DOT +[=]) NO"
+                     "\\1 @DOXYGEN_DOT_FOUND@" doxygen_out ${doxygen_out})
+string(REGEX REPLACE "(DOT_PATH +[=])"
+                     "\\1 @DOXYGEN_DOT_EXECUTABLE@" doxygen_out ${doxygen_out})
+string(REGEX REPLACE "(EXAMPLE_PATH +[=])"
+                     "\\1 ../doc/license" doxygen_out ${doxygen_out})
+string(REGEX REPLACE "(GENERATE_TREEVIEW +[=]) NO"
+                     "\\1 YES" doxygen_out ${doxygen_out})
+string(REGEX REPLACE "(IMAGE_PATH +[=])"
+                     "\\1 @CMAKE_CURRENT_SOURCE_DIR@/input/img" doxygen_out ${doxygen_out})
+string(REGEX REPLACE "(USE_MDFILE_AS_MAINPAGE +[=])"
+                     "\\1 Readme.md" doxygen_out ${doxygen_out})
+
+##generate the documentation with doxygen
+file(WRITE @CMAKE_CURRENT_BINARY_DIR@/Doxyfile ${doxygen_out})
+execute_process(COMMAND @DOXYGEN_EXECUTABLE@ @CMAKE_CURRENT_BINARY_DIR@/Doxyfile
+                WORKING_DIRECTORY @CMAKE_INSTALL_PREFIX@)

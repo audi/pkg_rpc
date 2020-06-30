@@ -1,0 +1,139 @@
+common:
+    files:
+        - cmake/modules/FindJsonStubGenerator.cmake
+        - cmake/pkg_rpcConfig.cmake
+        - cmake/pkg_rpcConfigVersion.cmake
+        - cmake/pkg_rpcTargets.cmake
+        - cmake/stub_generation.cmake
+        - doc/license/licenses.txt
+        - doc/license/MPL2.0.txt
+        - doc/license/used_licenses/list_used_licenses.md
+        - doc/license/used_licenses/a_util/MPL2.0.txt
+        - doc/license/used_licenses/a_util/licenses.txt
+        - doc/license/used_licenses/a_util/used_oss.md
+        - include/json/allocator.h
+        - include/json/assertions.h
+        - include/json/autolink.h
+        - include/json/config.h
+        - include/json/features.h
+        - include/json/forwards.h
+        - include/json/json.h
+        - include/json/reader.h
+        - include/json/value.h
+        - include/json/version.h
+        - include/json/writer.h
+        - include/jsonrpccpp/client.h
+        - include/jsonrpccpp/client/batchcall.h
+        - include/jsonrpccpp/client/batchresponse.h
+        - include/jsonrpccpp/client/client.h
+        - include/jsonrpccpp/client/iclientconnector.h
+        - include/jsonrpccpp/client/rpcprotocolclient.h
+        - include/jsonrpccpp/common/errors.h
+        - include/jsonrpccpp/common/exception.h
+        - include/jsonrpccpp/common/jsonparser.h
+        - include/jsonrpccpp/common/procedure.h
+        - include/jsonrpccpp/common/specification.h
+        - include/jsonrpccpp/common/specificationparser.h
+        - include/jsonrpccpp/common/specificationwriter.h
+        - include/jsonrpccpp/common/version.h
+        - include/jsonrpccpp/server.h
+        - include/jsonrpccpp/server/abstractprotocolhandler.h
+        - include/jsonrpccpp/server/abstractserver.h
+        - include/jsonrpccpp/server/abstractserverconnector.h
+        - include/jsonrpccpp/server/abstractthreadedserver.h
+        - include/jsonrpccpp/server/iclientconnectionhandler.h
+        - include/jsonrpccpp/server/iprocedureinvokationhandler.h
+        - include/jsonrpccpp/server/requesthandlerfactory.h
+        - include/jsonrpccpp/server/rpcprotocolserver12.h
+        - include/jsonrpccpp/server/rpcprotocolserverv1.h
+        - include/jsonrpccpp/server/rpcprotocolserverv2.h
+        - include/jsonrpccpp/server/threadpool.h
+        - include/rpc_pkg.h
+        - include/rpc_pkg/http/http_rpc_server.h
+        - include/rpc_pkg/http/json_http_rpc.h
+        - include/rpc_pkg/http/threaded_http_server.h
+        - include/rpc_pkg/json_rpc.h
+        - include/rpc_pkg/rpc_object_registry.h
+        - include/rpc_pkg/rpc_server.h
+        - pkg_rpcConfig.cmake
+        - pkg_rpcConfigVersion.cmake
+        - Readme.md
+
+documentation:
+    conditions:
+        doc_x86:
+            arch: x86
+        doc_x86_64:
+            arch: x86_64
+    files:
+        - doc/html/index.html
+        - doc/html/*
+
+debug:
+    conditions:
+        debug_common:
+            build_type: Debug
+    files:
+        - cmake/pkg_rpcTargets-debug.cmake
+
+release:
+    conditions:
+        release_common:
+            build_type: Release
+    files:
+        - cmake/pkg_rpcTargets-release.cmake
+
+linux_and_qnx:
+    conditions:
+        lagd_linux:
+            os: Linux
+        lagd_qnx:
+            os: Neutrino
+    files:
+        - bin/jsonrpcstub
+
+linux_and_qnx_debug:
+    conditions:
+        lagd_linux:
+            os: Linux
+            build_type: Debug
+        lagd_qnx:
+            os: Neutrino
+            build_type: Debug
+    files:
+        - lib/libpkg_rpcd.a
+
+linux_and_qnx_release:
+    conditions:
+        lagd_linux:
+            os: Linux
+            build_type: Release
+        lagd_qnx:
+            os: Neutrino
+            build_type: Release
+    files:
+        - lib/libpkg_rpc.a
+
+windows:
+    conditions:
+        windows_common:
+            os: Windows
+    files:
+        - bin/jsonrpcstub.exe
+
+windows_debug:
+    conditions:
+        lagd:
+            os: Windows
+            build_type: Debug
+    files:
+        - lib/pkg_rpcd.lib
+        - lib/pkg_rpcd.pdb
+
+windows_release:
+    conditions:
+        lagd:
+            os: Windows
+            build_type: Release
+    files:
+        - lib/pkg_rpc.lib
